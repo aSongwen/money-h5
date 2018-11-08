@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>绑定微信</title>
+    <style>
+        body{
+            padding: 0;
+            margin: 0;
+        }
+        div{
+            color:#333;
+            text-align: center;
+        }
+        .first{
+            font-size: 0.3rem;
+            margin-top: 1rem;
+        }
+        .second{
+            font-size: 0.44rem;
+            font-weight: bold;
+            margin-top: 0.7rem;
+            letter-spacing:0.15rem;
+        }
+        .third{
+            display: flex;
+            justify-content: center;
+            margin-top: 0.8rem;
+        }
+        .third p{
+            background:#f54545;
+            color:#fff;
+            font-size: 0.22rem;
+            width:47%;
+            height:0.8rem;
+            line-height: 0.8rem;
+            border-radius: 5px
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <p class="first"></p>
+        <p class="second"></p>
+        <!--<div class="third">-->
+            <!--<p>点击复制</p>-->
+        <!--</div>-->
+    </div>
+</body>
+<script>
+  //禁止微信分享
+  function onBridgeReady() {
+    WeixinJSBridge.call('hideOptionMenu');
+  }
+
+  if (typeof WeixinJSBridge == "undefined") {
+    if (document.addEventListener) {
+      document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+    } else if (document.attachEvent) {
+      document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+      document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+    }
+  } else {
+    onBridgeReady();
+  }
+
+    document.documentElement.style.fontSize = `${document.documentElement.clientWidth / 640 *100}px`;
+
+    window.onload = function(){
+        var msg = getQueryString("msg");
+        var status = getQueryString("status");
+        var first = document.getElementsByClassName("first").item(0);
+        var second = document.getElementsByClassName("second").item(0);
+        if(status == 0) {
+          first.innerHTML = "微信绑定验证码为";
+          second.innerHTML = msg;
+        } else if(status == 1) {
+          first.innerHTML = "绑定的用户名为";
+          second.innerHTML = msg;
+        }
+    };
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+</script>
+</html>
